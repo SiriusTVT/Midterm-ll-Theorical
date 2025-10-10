@@ -1,6 +1,18 @@
 # Simulador de Gestión de Memoria
 
-Este es un programa en C++ que simula un sistema básico de gestión de memoria con las siguientes características:
+## Descripción General
+
+A continuación se presenta una guía teórico-práctica para los estudiantes del curso de sistemas operativos. Esta guía permite explorar y experimentar con conceptos relacionados con memoria, asignación de memoria en sistemas paginados y aplicar los principios de la memoria virtual.
+
+## Objetivos
+
+Durante el desarrollo de esta guía el estudiante:
+
+- Identificar la memoria física.
+- Aplicar los principios de la memoria virtual.
+- Recibir solicitudes de asignación y liberación de memoria.
+- Aplicar los algoritmos de asignación: First Fit, Best Fit, Worst Fit
+- Presentar el estado de la memoria tras cada operación.
 
 ## Funcionalidades Implementadas
 
@@ -9,8 +21,10 @@ Este es un programa en C++ que simula un sistema básico de gestión de memoria 
 - **Liberación de memoria (L)**: Comando `L <proceso>` para liberar memoria de procesos
 - **Visualización de memoria (M)**: Comando `M` para mostrar el estado actual de la memoria
 - **Memoria configurable**: Tamaño mínimo de 100 unidades, configurable al inicio
-- **Algoritmo First Fit**: Busca el primer bloque libre suficientemente grande
+- **Algoritmo First Fit**: Busca el primer bloque libre suficientemente grande (implementado)
 - **Fusión automática**: Los bloques libres adyacentes se fusionan automáticamente
+
+> **Nota**: Actualmente implementa el algoritmo **First Fit**. Los algoritmos Best Fit y Worst Fit pueden ser agregados como extensiones futuras del proyecto.
 
 ## Compilación y Ejecución
 
