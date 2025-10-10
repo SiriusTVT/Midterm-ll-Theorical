@@ -1,0 +1,28 @@
+# Archivo de prueba para el simulador de memoria
+# Líneas que empiezan con # son comentarios
+
+# Mostrar estado inicial
+M
+
+# Asignar memoria a algunos procesos
+A proceso1 20
+A proceso2 15
+A proceso3 30
+
+# Mostrar estado después de las asignaciones
+M
+
+# Liberar un proceso en el medio
+L proceso2
+
+# Mostrar estado después de liberar proceso2
+M
+
+# Asignar un nuevo proceso que podría usar el espacio liberado
+A proceso4 10
+
+# Mostrar estado final
+M
+
+# Mostrar estadísticas
+S
