@@ -16,6 +16,9 @@ Durante el desarrollo de esta guía el estudiante:
 
 ## Funcionalidades Implementadas
 
+## Funcionalidades Implementadas
+
+### Tarea 1: Simulador Básico
 - **Entrada dinámica**: El programa permite elegir entre modo interactivo (consola) o desde archivo de texto
 - **Asignación de memoria (A)**: Comando `A <proceso> <tamaño>` para asignar memoria a procesos
 - **Liberación de memoria (L)**: Comando `L <proceso>` para liberar memoria de procesos
@@ -24,41 +27,56 @@ Durante el desarrollo de esta guía el estudiante:
 - **Algoritmo First Fit**: Busca el primer bloque libre suficientemente grande (implementado)
 - **Fusión automática**: Los bloques libres adyacentes se fusionan automáticamente
 
-> **Nota**: Actualmente implementa el algoritmo **First Fit**. Los algoritmos Best Fit y Worst Fit pueden ser agregados como extensiones futuras del proyecto.
+### Tarea 2: Algoritmos de Asignación
+- **First Fit**: Primer bloque libre que quepa el proceso
+- **Best Fit**: Bloque libre más pequeño que pueda contener el proceso
+- **Worst Fit**: Bloque libre más grande disponible
+- **Parámetros por línea de comandos**: Tamaño de memoria, algoritmo y archivo de entrada
+- **Cambio dinámico de algoritmo**: Comando `ALG` para cambiar algoritmo durante ejecución
+- **Formato de salida específico**: `[Proceso: tamaño][Libre: tamaño]` según especificaciones
+
+> **Nota**: La Tarea 1 implementa solo First Fit. La Tarea 2 implementa los tres algoritmos completos con entrada por línea de comandos.
 
 ## Compilación y Ejecución
 
-### Opción 1: Usando Makefile (Recomendado)
+### Tarea 1: Simulador Básico
 ```bash
-# Compilar todos los archivos CPP en Algoritmos/Tareas
+# Compilar
 make all
 
-# Ejecutar el programa principal
-make run
-
-# Ejecutar con archivo de prueba automáticamente
-make test
-
-# Limpiar archivos compilados
-make clean
-
-# Ver archivos CPP detectados y ejecutables que se generarán
-make list
-
-# Ver ayuda de comandos disponibles
-make help
+# Ejecutar Tarea 1
+make run-tarea1
 ```
 
-### Opción 2: Compilación Manual
+### Tarea 2: Algoritmos de Asignación
 ```bash
-# Navegar a la carpeta de tareas
-cd Algoritmos/Tareas
-
 # Compilar
-g++ memory_manager.cpp -o memory_manager.exe
+make all
 
-# Ejecutar
-memory_manager.exe
+# Ejecutar con parámetros específicos
+cd Algoritmos/Tareas
+memory_manager_tarea2.exe <memoria> <algoritmo> [archivo]
+
+# Ejemplos:
+memory_manager_tarea2.exe 100 1              # 100 unidades, First Fit, interactivo
+memory_manager_tarea2.exe 150 2 ../../Test/ejemplo_tarea2.txt  # Best Fit con archivo
+
+# Algoritmos disponibles:
+# 1 = First Fit
+# 2 = Best Fit  
+# 3 = Worst Fit
+```
+
+### Pruebas Automatizadas
+```bash
+# Probar ejemplo específico de Tarea 2 con todos los algoritmos
+make test-algorithms
+
+# Demostrar diferencias entre algoritmos
+make test-differences
+
+# Ver todos los comandos disponibles
+make help
 ```
 
 ## Comandos del Makefile
@@ -67,56 +85,37 @@ memory_manager.exe
 |---------|-------------|
 | `make all` | Compila todos los archivos .cpp en Algoritmos/Tareas |
 | `make clean` | Elimina todos los archivos .exe en Algoritmos/Tareas |
-| `make run` | Ejecuta memory_manager.exe |
-| `make test` | Ejecuta memory_manager con archivo de prueba automáticamente |
+| `make run-tarea1` | Ejecuta memory_manager.exe (Tarea 1) |
+| `make run-tarea2` | Muestra ayuda para ejecutar Tarea 2 |
+| `make test-algorithms` | Prueba todos los algoritmos con ejemplo de Tarea 2 |
+| `make test-differences` | Demuestra diferencias entre algoritmos |
 | `make list` | Muestra archivos CPP encontrados y ejecutables a generar |
 | `make help` | Muestra la ayuda completa del Makefile |
 
-## Ejemplo de Uso
+## Ejemplo de Uso - Tarea 2
 
-```
-=== SIMULADOR DE GESTIÓN DE MEMORIA ===
-Configuración inicial
+### Uso por Línea de Comandos
+```bash
+# Ejecutar con First Fit
+memory_manager_tarea2.exe 100 1
 
-Ingrese el tamaño total de memoria (mínimo 100): 100
-Memoria configurada: 100 unidades
+# Ejecutar con Best Fit y archivo
+memory_manager_tarea2.exe 100 2 ../../Test/ejemplo_tarea2.txt
 
-¿Cómo desea introducir los comandos?
-1. Desde consola (interactivo)
-2. Desde archivo de texto
-Seleccione una opción (1 o 2): 1
-
-=== MODO INTERACTIVO ===
-Comandos disponibles:
-  A <proceso> <tamaño>  - Asignar memoria
-  L <proceso>           - Liberar memoria
-  M                     - Mostrar estado de la memoria
-  S                     - Mostrar estadísticas
-  F <archivo>           - Ejecutar comandos desde archivo
-  Q                     - Salir
-
-shell> A proceso1 20
-Memoria asignada al proceso 'proceso1' - Tamaño: 20 unidades
-
-shell> M
-==================================================
-MAPA DE MEMORIA (Total: 100 unidades)
-==================================================
-Inicio  Tamaño Estado      Proceso
---------------------------------------------------
-0       20      OCUPADO     proceso1
-20      80      LIBRE
-
-shell> Q
+# Resultado esperado del ejemplo:
+# Entrada: A P1 10, A P2 25, L P1, A P3 8, M
+# Salida: [P2: 25][Libre: 10][P3: 8][Libre: 57]  (con Worst Fit)
+#         [P3: 8][Libre: 2][P2: 25][Libre: 65]   (con First/Best Fit)
 ```
 
-### Modo Archivo
-Si selecciona la opción 2, el programa le pedirá el nombre del archivo con los comandos y los ejecutará automáticamente. Después de terminar, puede optar por continuar en modo interactivo.
+### Demostración de Diferencias
+```bash
+# El comando make test-algorithms muestra cómo cada algoritmo 
+# produce resultados diferentes con la misma secuencia de comandos:
 
-**Ejemplo usando el archivo de prueba:**
-```
-shell> 2
-Ingrese el nombre del archivo con los comandos: ..\Test\test_commands.txt
+# First Fit: Usa el primer bloque disponible
+# Best Fit:  Usa el bloque más pequeño que sirva  
+# Worst Fit: Usa el bloque más grande disponible
 ```
 
 ## Estructura del Proyecto
@@ -124,14 +123,18 @@ Ingrese el nombre del archivo con los comandos: ..\Test\test_commands.txt
 ```
 ├── Algoritmos/
 │   └── Tareas/
-│       ├── memory_manager.cpp    # Código fuente principal
-│       └── memory_manager.exe    # Ejecutable compilado
+│       ├── memory_manager.cpp          # Tarea 1: Simulador básico
+│       ├── memory_manager.exe          # Ejecutable Tarea 1
+│       ├── memory_manager_tarea2.cpp   # Tarea 2: Tres algoritmos
+│       └── memory_manager_tarea2.exe   # Ejecutable Tarea 2
 ├── Test/
-│   └── test_commands.txt         # Archivo de comandos de prueba
-├── README.md                     # Documentación del proyecto
-├── Makefile                      # Configuración de compilación
-├── .gitignore                    # Archivos ignorados por Git
-└── Parcial_OS2025_2.pdf         # Documento del parcial
+│   ├── test_commands.txt               # Comandos de prueba Tarea 1
+│   ├── ejemplo_tarea2.txt              # Ejemplo específico Tarea 2
+│   └── test_algorithms.txt             # Prueba diferencias algoritmos
+├── README.md                           # Documentación del proyecto
+├── Makefile                            # Configuración de compilación
+├── .gitignore                          # Archivos ignorados por Git
+└── Parcial_OS2025_2.pdf               # Documento del parcial
 ```
 
 ## Archivos Incluidos
