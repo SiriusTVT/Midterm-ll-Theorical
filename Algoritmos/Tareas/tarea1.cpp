@@ -7,6 +7,9 @@
 #include <iomanip>
 #include <algorithm>
 #include <cctype>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 // Estructura para representar un bloque de memoria
 struct MemoryBlock {
@@ -202,6 +205,73 @@ public:
     }
 };
 
+// Función para listar archivos en el directorio Test
+std::vector<std::string> list_test_files() {
+    std::vector<std::string> files;
+    std::string test_dir = "../../Test";
+    
+    try {
+        if (fs::exists(test_dir) && fs::is_directory(test_dir)) {
+            for (const auto& entry : fs::directory_iterator(test_dir)) {
+                if (entry.is_regular_file()) {
+                    files.push_back(entry.path().filename().string());
+                }
+            }
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Error al acceder al directorio Test: " << e.what() << std::endl;
+    }
+    
+    return files;
+}
+
+// Función para mostrar y seleccionar archivo dinámicamente
+std::string select_test_file() {
+    std::vector<std::string> files = list_test_files();
+    
+    if (files.empty()) {
+        std::cout << "No se encontraron archivos en el directorio Test.\n";
+        std::cout << "Ingrese el nombre del archivo manualmente: ";
+        std::string filename;
+        std::getline(std::cin, filename);
+        return filename;
+    }
+    
+    std::cout << "\n=== ARCHIVOS DISPONIBLES EN TEST ===\n";
+    for (size_t i = 0; i < files.size(); i++) {
+        std::cout << (i + 1) << ". " << files[i] << "\n";
+    }
+    std::cout << (files.size() + 1) << ". Introducir nombre manualmente\n";
+    
+    std::cout << "\nSeleccione una opcion (1-" << (files.size() + 1) << "): ";
+    std::string input;
+    std::getline(std::cin, input);
+    
+    try {
+        int choice = std::stoi(input);
+        if (choice >= 1 && choice <= static_cast<int>(files.size())) {
+            std::string selected_file = "../../Test/" + files[choice - 1];
+            std::cout << "Archivo seleccionado: " << files[choice - 1] << "\n";
+            return selected_file;
+        } else if (choice == static_cast<int>(files.size()) + 1) {
+            std::cout << "Ingrese el nombre del archivo: ";
+            std::string filename;
+            std::getline(std::cin, filename);
+            return filename;
+        } else {
+            std::cout << "Opción no válida. Usando el primer archivo disponible.\n";
+            std::string selected_file = "../../Test/" + files[0];
+            std::cout << "Archivo seleccionado: " << files[0] << "\n";
+            return selected_file;
+        }
+    } catch (const std::exception& e) {
+        std::cout << "Entrada no válida. Usando el primer archivo disponible.\n";
+        std::string selected_file = "../../Test/" + files[0];
+        std::cout << "Archivo seleccionado: " << files[0] << "\n";
+        return selected_file;
+    }
+}
+
 class MemorySimulator {
 private:
     MemoryManager memory_manager;
@@ -238,7 +308,7 @@ public:
         std::cout << "  L <proceso>           - Liberar memoria\n";
         std::cout << "  M                     - Mostrar estado de la memoria\n";
         std::cout << "  S                     - Mostrar estadisticas\n";
-        std::cout << "  F <archivo>           - Ejecutar comandos desde archivo\n";
+        std::cout << "  F [archivo]           - Ejecutar comandos desde archivo (selección dinámica si no se especifica)\n";
         std::cout << "  Q                     - Salir\n\n";
         
         std::string line;
@@ -256,10 +326,8 @@ public:
     
     void run_from_file() {
         std::cout << "\n=== MODO ARCHIVO ===\n";
-        std::cout << "Ingrese el nombre del archivo con los comandos: ";
         
-        std::string filename;
-        std::getline(std::cin, filename);
+        std::string filename = select_test_file();
         
         if (filename.empty()) {
             std::cout << "No se especifico archivo. Cambiando a modo interactivo.\n";
@@ -346,7 +414,14 @@ public:
             if (iss >> filename) {
                 execute_from_file(filename);
             } else {
-                std::cout << "Uso: F <archivo>\n";
+                // Si no se proporciona archivo, usar selección dinámica
+                std::cout << "Seleccionando archivo dinámicamente...\n";
+                std::string selected_file = select_test_file();
+                if (!selected_file.empty()) {
+                    execute_from_file(selected_file);
+                } else {
+                    std::cout << "No se seleccionó ningún archivo.\n";
+                }
             }
         }
         else if (command == "Q") {
