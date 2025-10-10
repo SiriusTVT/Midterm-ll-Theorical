@@ -1,0 +1,18 @@
+A P1 30
+A P2 20
+A P3 25
+M
+L P2
+A P4 15
+M
+A P5 40
+M
+L P1
+A P6 50
+M
+L P3
+L P4
+A P7 35
+M
+S
+Q
