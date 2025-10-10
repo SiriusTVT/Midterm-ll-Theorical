@@ -1,0 +1,28 @@
+# Archivos ejecutables
+*.exe
+
+# Archivos objeto
+*.o
+*.obj
+
+# Archivos de depuración
+*.pdb
+
+# Archivos temporales del compilador
+*.tmp
+*.temp
+
+# Archivos de IDE/Editor
+.vscode/
+.vs/
+*.swp
+*.swo
+*~
+
+# Archivos del sistema
+Thumbs.db
+.DS_Store
+
+# Archivos de backup
+*.bak
+*.backup

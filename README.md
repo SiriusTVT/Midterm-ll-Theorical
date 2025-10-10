@@ -116,6 +116,7 @@ Ingrese el nombre del archivo con los comandos: ..\Test\test_commands.txt
 │   └── test_commands.txt         # Archivo de comandos de prueba
 ├── README.md                     # Documentación del proyecto
 ├── Makefile                      # Configuración de compilación
+├── .gitignore                    # Archivos ignorados por Git
 └── Parcial_OS2025_2.pdf         # Documento del parcial
 ```
 
