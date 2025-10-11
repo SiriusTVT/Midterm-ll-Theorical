@@ -183,16 +183,42 @@ public:
         int used_memory = 0;
         int free_blocks = 0;
         int used_blocks = 0;
+        int smallest_free_block = INT_MAX;
+        int largest_free_block = 0;
+        int total_free_fragments = 0;
         
         for (const auto& block : memory_blocks) {
             if (block.is_free) {
                 free_memory += block.size;
                 free_blocks++;
+                if (block.size < smallest_free_block) {
+                    smallest_free_block = block.size;
+                }
+                if (block.size > largest_free_block) {
+                    largest_free_block = block.size;
+                }
+                total_free_fragments += block.size;
             } else {
                 used_memory += block.size;
                 used_blocks++;
             }
         }
+        
+        // Calcular fragmentación externa
+        // Fragmentación externa = suma de bloques libres que son demasiado pequeños para ser útiles
+        int external_fragmentation = 0;
+        int min_useful_size = 10; // Consideramos bloques menores a 10 como fragmentación externa
+        
+        for (const auto& block : memory_blocks) {
+            if (block.is_free && block.size < min_useful_size) {
+                external_fragmentation += block.size;
+            }
+        }
+        
+        // Calcular fragmentación interna
+        // Para First Fit, la fragmentación interna es mínima ya que no hay desperdicio dentro de bloques asignados
+        // Sin embargo, podemos calcular el espacio total fragmentado
+        int internal_fragmentation = 0; // En First Fit básico, no hay fragmentación interna real
         
         std::cout << "Estadisticas de memoria:\n";
         std::cout << "- Memoria total: " << total_memory << " unidades\n";
@@ -202,6 +228,112 @@ public:
                  << (100.0 * used_memory / total_memory) << "%)\n";
         std::cout << "- Bloques libres: " << free_blocks << "\n";
         std::cout << "- Bloques ocupados: " << used_blocks << "\n";
+        
+        std::cout << "\n=== ANALISIS DE FRAGMENTACION ===\n";
+        std::cout << "- Fragmentacion externa: " << external_fragmentation << " unidades (" 
+                 << (100.0 * external_fragmentation / total_memory) << "%)\n";
+        std::cout << "- Fragmentacion interna: " << internal_fragmentation << " unidades (" 
+                 << (100.0 * internal_fragmentation / total_memory) << "%)\n";
+        
+        if (free_blocks > 0) {
+            std::cout << "- Bloque libre mas pequeno: " << smallest_free_block << " unidades\n";
+            std::cout << "- Bloque libre mas grande: " << largest_free_block << " unidades\n";
+            std::cout << "- Fragmentos libres menores a " << min_useful_size << " unidades: " 
+                     << external_fragmentation << " unidades\n";
+        }
+        
+        // Eficiencia del algoritmo
+        double efficiency = (100.0 * used_memory / total_memory);
+        std::cout << "- Eficiencia de utilizacion: " << efficiency << "%\n";
+        std::cout << "- Nivel de fragmentacion total: " 
+                 << (100.0 * (external_fragmentation + internal_fragmentation) / total_memory) << "%\n";
+    }
+    
+    // Método para análisis detallado de fragmentación (nuevo comando FR)
+    void analyze_fragmentation() {
+        std::cout << "\n" << std::string(50, '=') << "\n";
+        std::cout << "ANALISIS DE FRAGMENTACION - FIRST FIT\n";
+        std::cout << std::string(50, '=') << "\n";
+        
+        std::vector<int> free_sizes;
+        int total_free = 0, total_used = 0;
+        int used_memory = 0;
+        
+        for (const auto& block : memory_blocks) {
+            if (block.is_free) {
+                free_sizes.push_back(block.size);
+                total_free += block.size;
+            } else {
+                total_used += block.size;
+                used_memory += block.size;
+            }
+        }
+        
+        if (free_sizes.empty()) {
+            std::cout << "No hay bloques libres - Sin fragmentacion externa\n";
+            std::cout << std::string(50, '=') << "\n";
+            return;
+        }
+        
+        std::sort(free_sizes.begin(), free_sizes.end());
+        
+        // Clasificación de fragmentos
+        int critical_fragments = 0, small_fragments = 0, usable_fragments = 0;
+        int critical_size = 0, small_size = 0, usable_size = 0;
+        
+        for (int size : free_sizes) {
+            if (size <= 5) {
+                critical_fragments++;
+                critical_size += size;
+            } else if (size <= 15) {
+                small_fragments++;
+                small_size += size;
+            } else {
+                usable_fragments++;
+                usable_size += size;
+            }
+        }
+        
+        std::cout << "Distribucion de fragmentos libres:\n";
+        std::cout << "- Criticos (1-5 unidades): " << critical_fragments 
+                 << " fragmentos, " << critical_size << " unidades\n";
+        std::cout << "- Pequenos (6-15 unidades): " << small_fragments 
+                 << " fragmentos, " << small_size << " unidades\n";
+        std::cout << "- Utilizables (>15 unidades): " << usable_fragments 
+                 << " fragmentos, " << usable_size << " unidades\n";
+        
+        std::cout << "\nTamanos de fragmentos: ";
+        for (size_t i = 0; i < free_sizes.size() && i < 8; i++) {
+            std::cout << free_sizes[i];
+            if (i < free_sizes.size() - 1 && i < 7) std::cout << ", ";
+        }
+        if (free_sizes.size() > 8) std::cout << "...";
+        std::cout << " unidades\n";
+        
+        // Métricas de fragmentación
+        double fragmentation_ratio = (double)(critical_size + small_size) / total_free * 100;
+        double efficiency = (double)usable_size / total_free * 100;
+        
+        std::cout << "\nMetricas de fragmentacion:\n";
+        std::cout << "- Fragmentacion problematica: " << fragmentation_ratio << "%\n";
+        std::cout << "- Eficiencia de espacio libre: " << efficiency << "%\n";
+        std::cout << "- Fragmento mas pequeno: " << free_sizes[0] << " unidades\n";
+        std::cout << "- Fragmento mas grande: " << free_sizes.back() << " unidades\n";
+        
+        // Recomendaciones específicas para First Fit
+        std::cout << "\nAnalisis First Fit:\n";
+        std::cout << "- Velocidad: Muy buena (busqueda lineal simple)\n";
+        std::cout << "- Fragmentacion: " << (fragmentation_ratio > 40 ? "Alta" : 
+                                              fragmentation_ratio > 20 ? "Media" : "Baja") << "\n";
+        
+        if (critical_size > total_memory * 0.1) {
+            std::cout << "- RECOMENDACION: Considerar compactacion de memoria\n";
+        }
+        if (free_sizes.size() > used_memory / total_memory * 10) {
+            std::cout << "- RECOMENDACION: Demasiados fragmentos pequenos\n";
+        }
+        
+        std::cout << std::string(50, '=') << "\n";
     }
 };
 
@@ -308,6 +440,7 @@ public:
         std::cout << "  L <proceso>           - Liberar memoria\n";
         std::cout << "  M                     - Mostrar estado de la memoria\n";
         std::cout << "  S                     - Mostrar estadisticas\n";
+        std::cout << "  FR                    - Analisis de fragmentacion\n";
         std::cout << "  F [archivo]           - Ejecutar comandos desde archivo (selección dinámica si no se especifica)\n";
         std::cout << "  Q                     - Salir\n\n";
         
@@ -408,6 +541,9 @@ public:
         }
         else if (command == "S") {
             memory_manager.show_statistics();
+        }
+        else if (command == "FR") {
+            memory_manager.analyze_fragmentation();
         }
         else if (command == "F") {
             std::string filename;
