@@ -1,0 +1,61 @@
+# Escenario 5: Comparación mixta de algoritmos
+# Secuencia compleja para evaluar todos los algoritmos
+
+# Llenar memoria inicial
+A P1 50
+A P2 80
+A P3 30
+A P4 120
+A P5 40
+A P6 70
+M
+FR
+# Crear patrón de fragmentación específico
+L P2
+L P4
+L P6
+M
+# Asignar procesos de tamaños estratégicos
+A P7 60  # Debería comportarse diferente en cada algoritmo
+A P8 100 # Proceso grande para probar Worst Fit
+M
+FR
+# Liberar procesos pequeños
+L P3
+L P5
+M
+# Intentar optimizar uso de memoria
+A P9 25
+A P10 35
+A P11 65
+M
+# Crear situación de memoria llena
+A P12 15
+A P13 45
+A P14 55
+A P15 20
+M
+FR
+# Prueba de liberación masiva
+L P1
+L P7
+L P9
+L P11
+L P13
+M
+# Re-asignación con diferentes tamaños
+A P16 90
+A P17 110
+A P18 75
+M
+# Prueba final de fragmentación
+L P8
+L P10
+M
+A P19 130
+A P20 85
+A P21 95
+M
+FR
+S
+Q

@@ -1,0 +1,31 @@
+# Escenario 2: Prueba de eficiencia de Best Fit
+# Diseñado para mostrar las ventajas del algoritmo Best Fit
+
+A P1 40
+A P2 20
+A P3 35
+A P4 15
+A P5 25
+M
+# Liberar procesos para crear huecos de diferentes tamaños
+L P2
+L P4
+M
+# Asignar procesos que encajen perfectamente (Best Fit advantage)
+A P6 20
+A P7 15
+M
+# Liberar proceso grande
+L P1
+M
+# Asignar proceso mediano que no desperdicie tanto espacio
+A P8 30
+M
+# Intentar llenar espacios restantes
+A P9 10
+A P10 8
+A P11 12
+M
+FR
+S
+Q

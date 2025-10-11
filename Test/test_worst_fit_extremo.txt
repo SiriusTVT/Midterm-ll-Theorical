@@ -1,0 +1,47 @@
+# Escenario 4: Prueba de Worst Fit extremo
+# Diseñado para mostrar comportamiento del algoritmo Worst Fit
+
+A P1 100
+A P2 200
+A P3 150
+M
+# Liberar el proceso más grande para crear un hueco grande
+L P2
+M
+# Asignar proceso pequeño (Worst Fit lo pondrá en el hueco más grande)
+A P4 50
+M
+# Liberar otro proceso grande
+L P3
+M
+# Asignar otro proceso pequeño
+A P5 30
+M
+# Asignar proceso mediano
+A P6 80
+M
+# Liberar proceso inicial
+L P1
+M
+# Asignar varios procesos pequeños
+A P7 25
+A P8 35
+A P9 40
+M
+FR
+# Crear más fragmentación
+L P4
+L P6
+M
+A P10 60
+A P11 45
+M
+# Intentar llenar con procesos muy pequeños
+A P12 10
+A P13 15
+A P14 20
+A P15 12
+M
+FR
+S
+Q

@@ -1,0 +1,44 @@
+# Escenario 3: Prueba de densidad alta
+# Múltiples asignaciones pequeñas seguidas de liberaciones para evaluar fragmentación
+
+A P1 8
+A P2 12
+A P3 6
+A P4 15
+A P5 10
+A P6 20
+A P7 5
+A P8 18
+A P9 7
+A P10 25
+M
+FR
+# Liberar procesos alternados para fragmentar la memoria
+L P2
+L P4
+L P6
+L P8
+L P10
+M
+FR
+# Intentar asignar procesos de tamaños medianos
+A P11 16
+A P12 22
+A P13 14
+A P14 19
+M
+# Liberar algunos procesos pequeños
+L P1
+L P3
+L P7
+M
+# Asignar procesos muy pequeños para intentar usar fragmentos
+A P15 4
+A P16 3
+A P17 5
+A P18 2
+A P19 6
+M
+FR
+S
+Q
