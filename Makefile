@@ -1,7 +1,7 @@
 # Makefile para compilar archivos CPP en Algoritmos/Tareas
 
 CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wextra -g
+CXXFLAGS = -std=c++17 -Wall -Wextra -g
 TAREAS_DIR = Algoritmos/Tareas
 TEST_DIR = Test
 

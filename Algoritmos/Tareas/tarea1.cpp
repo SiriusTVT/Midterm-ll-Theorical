@@ -329,7 +329,7 @@ public:
         if (critical_size > total_memory * 0.1) {
             std::cout << "- RECOMENDACION: Considerar compactacion de memoria\n";
         }
-        if (free_sizes.size() > used_memory / total_memory * 10) {
+        if (free_sizes.size() > static_cast<size_t>(used_memory / total_memory * 10)) {
             std::cout << "- RECOMENDACION: Demasiados fragmentos pequenos\n";
         }
         
