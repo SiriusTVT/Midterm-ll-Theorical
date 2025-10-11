@@ -1,0 +1,31 @@
+# Escenario 1: Fragmentación progresiva
+# Este escenario crea y libera procesos de forma que genere mucha fragmentación externa
+
+A P1 25
+A P2 10
+A P3 30
+A P4 15
+A P5 20
+M
+# Liberar procesos alternados para crear huecos
+L P2
+L P4
+M
+# Intentar asignar procesos que no quepan en los huecos
+A P6 12
+A P7 18
+A P8 25
+M
+# Liberar más procesos para crear más fragmentación
+L P1
+L P5
+M
+# Asignar procesos pequeños que aumenten la fragmentación
+A P9 5
+A P10 8
+A P11 6
+A P12 4
+M
+FR
+S
+Q
