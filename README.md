@@ -2,7 +2,7 @@
 ## Midterm II - Sistemas Operativos 2025-2
 
 ## 📺 Video de Explicación
-🎥 **[Ver Video Demostrativo](./Proyecto%20de%20video.mp4)**
+🎥 **[Ver Video Demostrativo](https://github.com/SiriusTVT/Midterm-ll-Theorical/blob/main/Proyecto%20de%20v%C3%ADdeo.mp4)**
 
 Este video incluye:
 - Demostración completa de los simuladores
