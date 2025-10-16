@@ -1,5 +1,6 @@
 # Simuladores Avanzados de Gestión de Memoria
 ## Midterm II - Sistemas Operativos 2025-2
+**Autor:** Juan David Troncoso
 
 ## 📺 Video de Explicación
 🎥 **[Ver Video Demostrativo](https://github.com/SiriusTVT/Midterm-ll-Theorical/blob/main/Proyecto%20de%20v%C3%ADdeo.mp4)**
