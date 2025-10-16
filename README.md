@@ -1,6 +1,17 @@
 # Simuladores Avanzados de Gestión de Memoria
 ## Midterm II - Sistemas Operativos 2025-2
 
+## 📺 Video de Explicación
+🎥 **[Ver Video Demostrativo](./Proyecto%20de%20video.mp4)**
+
+Este video incluye:
+- Demostración completa de los simuladores
+- Comparación en vivo de los algoritmos First Fit, Best Fit y Worst Fit  
+- Análisis de fragmentación en tiempo real
+- Casos de uso prácticos y recomendaciones
+
+---
+
 ## Descripción General
 
 Implementación completa de simuladores de gestión de memoria con algoritmos First Fit, Best Fit y Worst Fit. El proyecto incluye funcionalidades avanzadas como selección dinámica de archivos, análisis detallado de fragmentación (Tarea 3), y herramientas de visualización interactiva desarrolladas en C++17.
